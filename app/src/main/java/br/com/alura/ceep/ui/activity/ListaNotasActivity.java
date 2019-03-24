@@ -107,33 +107,37 @@ public class ListaNotasActivity extends AppCompatActivity {
         int modoDeListagem = pegarPreferencias();
         switch (modoDeListagem){
             case 1:
-                menu.getItem(0).setIcon(R.drawable.ic_grid_on_white_24dp);
-                listaNotas.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                configurarInterfaceParaListaLinear(menu.getItem(0));
                 break;
             case 2:
-                menu.getItem(0).setIcon(R.drawable.ic_list_white_24dp);
-                listaNotas.setLayoutManager(new StaggeredGridLayoutManager(2,1));
+                configurarInterfaceParaListaEscalonada(menu.getItem(0));
                 break;
             default:
-                menu.getItem(0).setIcon(R.drawable.ic_grid_on_white_24dp);
-                listaNotas.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                configurarInterfaceParaListaLinear(menu.getItem(0));
                 break;
         }
-
         return true;
+    }
+
+    private void configurarInterfaceParaListaEscalonada(MenuItem item) {
+        item.setIcon(R.drawable.ic_list_white_24dp);
+        listaNotas.setLayoutManager(new StaggeredGridLayoutManager(2,1));
+    }
+
+    private void configurarInterfaceParaListaLinear(MenuItem item) {
+        item.setIcon(R.drawable.ic_grid_on_white_24dp);
+        listaNotas.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(pegarPreferencias() == MODO_LINEAR){
-            listaNotas.setLayoutManager(new StaggeredGridLayoutManager(2,1));
+            configurarInterfaceParaListaEscalonada(item);
             salvarModoDeListagem(MODO_STAGGERED);
-            item.setIcon(R.drawable.ic_list_white_24dp);
         }else{
-            listaNotas.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            configurarInterfaceParaListaLinear(item);
             salvarModoDeListagem(MODO_LINEAR);
-            item.setIcon(R.drawable.ic_grid_on_white_24dp);
         }
         return super.onOptionsItemSelected(item);
     }
