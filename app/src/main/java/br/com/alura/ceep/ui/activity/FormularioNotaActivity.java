@@ -6,23 +6,28 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Nota;
+import br.com.alura.ceep.ui.recyclerview.adapter.ListaCoresAdapter;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnColorClickListener;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA;
 
-public class FormularioNotaActivity extends AppCompatActivity implements OnColorClickListener {
+public class FormularioNotaActivity extends AppCompatActivity {
 
 
     public static final String TITULO_APPBAR_INSERE = "Insere nota";
@@ -31,6 +36,8 @@ public class FormularioNotaActivity extends AppCompatActivity implements OnColor
     private TextView titulo;
     private TextView descricao;
     private ConstraintLayout layoutNotaFormulario;
+    private RecyclerView rvCores;
+    private ListaCoresAdapter listaCoresAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,38 @@ public class FormularioNotaActivity extends AppCompatActivity implements OnColor
         titulo = findViewById(R.id.formulario_nota_titulo);
         descricao = findViewById(R.id.formulario_nota_descricao);
         layoutNotaFormulario = findViewById(R.id.layout_nota_formulario);
+        List<Integer> listaCores = pegaTodasCores();
+        configuraRvCores(listaCores);
+    }
+
+    private List<Integer> pegaTodasCores() {
+        List<Integer> cores = new ArrayList<>();
+        cores.add(R.color.azulLista);
+        cores.add(R.color.brancoLista);
+        cores.add(R.color.vermelhoLista);
+        cores.add(R.color.verdeLista);
+        cores.add(R.color.amareloLista);
+        cores.add(R.color.lilasLista);
+        cores.add(R.color.cinzaLista);
+        cores.add(R.color.marromLista);
+        cores.add(R.color.roxoLista);
+        return cores;
+    }
+
+    private void configuraRvCores(List<Integer> listaCores) {
+        rvCores = findViewById(R.id.lista_cores);
+        configuraAdapter(rvCores, listaCores);
+    }
+
+    private void configuraAdapter(RecyclerView rvCores, List<Integer> listaCores) {
+        listaCoresAdapter = new ListaCoresAdapter(listaCores, this);
+        rvCores.setAdapter(listaCoresAdapter);
+        listaCoresAdapter.setOnColorClickListener(new OnColorClickListener() {
+            @Override
+            public void onItemClick(Integer corEscolhida) {
+                layoutNotaFormulario.setBackgroundColor(getResources().getColor(corEscolhida));
+            }
+        });
     }
 
     @Override
@@ -92,10 +131,5 @@ public class FormularioNotaActivity extends AppCompatActivity implements OnColor
 
     private boolean ehMenuSalvaNota(MenuItem item) {
         return item.getItemId() == R.id.menu_formulario_nota_ic_salva;
-    }
-
-    @Override
-    public void onItemClick(Integer corEscolhida) {
-        layoutNotaFormulario.setBackgroundColor(getResources().getColor(corEscolhida));
     }
 }
