@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,12 +16,13 @@ import java.io.Serializable;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Nota;
+import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnColorClickListener;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA;
 
-public class FormularioNotaActivity extends AppCompatActivity {
+public class FormularioNotaActivity extends AppCompatActivity implements OnColorClickListener {
 
 
     public static final String TITULO_APPBAR_INSERE = "Insere nota";
@@ -28,6 +30,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
     private int posicaoRecibida = POSICAO_INVALIDA;
     private TextView titulo;
     private TextView descricao;
+    private ConstraintLayout layoutNotaFormulario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
     private void inicializaCampos() {
         titulo = findViewById(R.id.formulario_nota_titulo);
         descricao = findViewById(R.id.formulario_nota_descricao);
+        layoutNotaFormulario = findViewById(R.id.layout_nota_formulario);
     }
 
     @Override
@@ -88,5 +92,10 @@ public class FormularioNotaActivity extends AppCompatActivity {
 
     private boolean ehMenuSalvaNota(MenuItem item) {
         return item.getItemId() == R.id.menu_formulario_nota_ic_salva;
+    }
+
+    @Override
+    public void onItemClick(Integer corEscolhida) {
+        layoutNotaFormulario.setBackgroundColor(getResources().getColor(corEscolhida));
     }
 }
