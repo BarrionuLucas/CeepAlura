@@ -40,7 +40,7 @@ public class ListaCoresAdapter extends RecyclerView.Adapter<ListaCoresAdapter.Co
 
     @Override
     public int getItemCount() {
-        return 0;
+        return cores.size();
     }
 
     class CorViewHolder extends RecyclerView.ViewHolder {
