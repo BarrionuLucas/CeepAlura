@@ -1,10 +1,14 @@
 package br.com.alura.ceep.ui.recyclerview.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -12,11 +16,11 @@ import br.com.alura.ceep.R;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnColorClickListener;
 
 public class ListaCoresAdapter extends RecyclerView.Adapter<ListaCoresAdapter.CorViewHolder>{
-    private final List<Integer> cores;
+    private final List<String> cores;
     private final Context context;
     private OnColorClickListener onColorClickListener;
 
-    public ListaCoresAdapter(List<Integer> cores, Context context) {
+    public ListaCoresAdapter(List<String> cores, Context context) {
         this.cores = cores;
         this.context = context;
     }
@@ -33,9 +37,15 @@ public class ListaCoresAdapter extends RecyclerView.Adapter<ListaCoresAdapter.Co
     }
 
     @Override
-    public void onBindViewHolder(CorViewHolder holder, int position) {
-        Integer cor = cores.get(position);
+    public void onBindViewHolder(CorViewHolder holder, final int position) {
+        final String cor = cores.get(position);
         holder.setCorDeFundo(cor);
+        holder.corDeFundo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onColorClickListener.onItemClick(cor);
+            }
+        });
     }
 
     @Override
@@ -44,14 +54,16 @@ public class ListaCoresAdapter extends RecyclerView.Adapter<ListaCoresAdapter.Co
     }
 
     class CorViewHolder extends RecyclerView.ViewHolder {
-        View corDeFundo;
+        ImageView corDeFundo;
         public CorViewHolder(View itemView) {
             super(itemView);
             corDeFundo = itemView.findViewById(R.id.opcao_item_cor);
         }
 
-        public void setCorDeFundo(Integer cor) {
-            corDeFundo.setBackgroundColor(cor);
+        public void setCorDeFundo(String cor) {
+            ShapeDrawable biggerCircle= new ShapeDrawable( new OvalShape());
+            biggerCircle.getPaint().setColor(Color.parseColor(cor));//you can give any color here
+            corDeFundo.setBackgroundDrawable(biggerCircle);
         }
     }
 }

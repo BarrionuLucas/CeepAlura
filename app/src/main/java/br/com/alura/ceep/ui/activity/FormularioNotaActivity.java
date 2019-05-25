@@ -2,6 +2,7 @@ package br.com.alura.ceep.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -9,12 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +35,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
     private ConstraintLayout layoutNotaFormulario;
     private RecyclerView rvCores;
     private ListaCoresAdapter listaCoresAdapter;
+    private String corDeFundoSelecionada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,36 +64,39 @@ public class FormularioNotaActivity extends AppCompatActivity {
         titulo = findViewById(R.id.formulario_nota_titulo);
         descricao = findViewById(R.id.formulario_nota_descricao);
         layoutNotaFormulario = findViewById(R.id.layout_nota_formulario);
-        List<Integer> listaCores = pegaTodasCores();
+        List<String> listaCores = pegaTodasCores();
         configuraRvCores(listaCores);
     }
 
-    private List<Integer> pegaTodasCores() {
-        List<Integer> cores = new ArrayList<>();
-        cores.add(R.color.azulLista);
-        cores.add(R.color.brancoLista);
-        cores.add(R.color.vermelhoLista);
-        cores.add(R.color.verdeLista);
-        cores.add(R.color.amareloLista);
-        cores.add(R.color.lilasLista);
-        cores.add(R.color.cinzaLista);
-        cores.add(R.color.marromLista);
-        cores.add(R.color.roxoLista);
+    private List<String> pegaTodasCores() {
+        List<String> cores = new ArrayList<>();
+
+        cores.add("#FFFFFF");
+        cores.add("#408EC9");
+        cores.add("#EC2F4B");
+        cores.add("#9ACD32");
+        cores.add("#F9F256");
+        cores.add("#F1CBFF");
+        cores.add("#D2D4DC");
+        cores.add("#A47C48");
+        cores.add("#BE29EC");
+
         return cores;
     }
 
-    private void configuraRvCores(List<Integer> listaCores) {
+    private void configuraRvCores(List<String> listaCores) {
         rvCores = findViewById(R.id.lista_cores);
         configuraAdapter(rvCores, listaCores);
     }
 
-    private void configuraAdapter(RecyclerView rvCores, List<Integer> listaCores) {
+    private void configuraAdapter(RecyclerView rvCores, List<String> listaCores) {
         listaCoresAdapter = new ListaCoresAdapter(listaCores, this);
         rvCores.setAdapter(listaCoresAdapter);
         listaCoresAdapter.setOnColorClickListener(new OnColorClickListener() {
             @Override
-            public void onItemClick(Integer corEscolhida) {
-                layoutNotaFormulario.setBackgroundColor(getResources().getColor(corEscolhida));
+            public void onItemClick(String corEscolhida) {
+                layoutNotaFormulario.setBackgroundColor(Color.parseColor(corEscolhida));
+                corDeFundoSelecionada = corEscolhida;
             }
         });
     }
@@ -126,7 +127,9 @@ public class FormularioNotaActivity extends AppCompatActivity {
     @NonNull
     private Nota criaNota() {
         return new Nota(titulo.getText().toString(),
-                descricao.getText().toString());
+                descricao.getText().toString(),
+                corDeFundoSelecionada
+        );
     }
 
     private boolean ehMenuSalvaNota(MenuItem item) {
