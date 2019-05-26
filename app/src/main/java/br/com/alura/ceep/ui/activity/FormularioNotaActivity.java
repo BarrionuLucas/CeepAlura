@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,26 @@ public class FormularioNotaActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if(savedInstanceState != null){
+            corDeFundoSelecionada = savedInstanceState.getString("bgColor");
+            try{
+                definirCorDeFundo(corDeFundoSelecionada);
+            }catch (Exception e ){
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Não foi posssível recuperar a cor definida", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("bgColor", corDeFundoSelecionada);
+        super.onSaveInstanceState(outState);
+    }
+
     private void preencheCampos(Nota notaRecebida) {
         titulo.setText(notaRecebida.getTitulo());
         descricao.setText(notaRecebida.getDescricao());
@@ -95,10 +116,19 @@ public class FormularioNotaActivity extends AppCompatActivity {
         listaCoresAdapter.setOnColorClickListener(new OnColorClickListener() {
             @Override
             public void onItemClick(String corEscolhida) {
-                layoutNotaFormulario.setBackgroundColor(Color.parseColor(corEscolhida));
-                corDeFundoSelecionada = corEscolhida;
+                try {
+                    definirCorDeFundo(corEscolhida);
+                    corDeFundoSelecionada = corEscolhida;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Houve um erro ao selecionar a cor", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+
+    private void definirCorDeFundo(String corEscolhida) throws Exception{
+        layoutNotaFormulario.setBackgroundColor(Color.parseColor(corEscolhida));
     }
 
     @Override
@@ -135,4 +165,5 @@ public class FormularioNotaActivity extends AppCompatActivity {
     private boolean ehMenuSalvaNota(MenuItem item) {
         return item.getItemId() == R.id.menu_formulario_nota_ic_salva;
     }
+
 }
