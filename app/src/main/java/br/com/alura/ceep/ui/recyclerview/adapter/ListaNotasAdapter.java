@@ -1,13 +1,14 @@
 package br.com.alura.ceep.ui.recyclerview.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
@@ -90,6 +91,9 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         private void preencheCampo(Nota nota) {
             titulo.setText(nota.getTitulo());
             descricao.setText(nota.getDescricao());
+            ShapeDrawable biggerCircle= new ShapeDrawable( new RectShape());
+            biggerCircle.getPaint().setColor(Color.parseColor(nota.getCor()));//you can give any color here
+            itemView.setBackgroundDrawable(biggerCircle);
         }
     }
 
