@@ -57,14 +57,16 @@ public class FormularioNotaActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         if(savedInstanceState != null){
             corDeFundoSelecionada = savedInstanceState.getString("bgColor");
             try{
-                definirCorDeFundo(corDeFundoSelecionada);
+                layoutNotaFormulario.setBackgroundColor(Color.parseColor(corDeFundoSelecionada));
             }catch (Exception e ){
                 e.printStackTrace();
+                layoutNotaFormulario.setBackgroundColor(Color.parseColor(getResources().getString(R.color.brancoLista)));
                 Toast.makeText(getApplicationContext(), "Não foi posssível recuperar a cor definida", Toast.LENGTH_SHORT).show();
             }
         }
@@ -80,12 +82,16 @@ public class FormularioNotaActivity extends AppCompatActivity {
     private void preencheCampos(Nota notaRecebida) {
         titulo.setText(notaRecebida.getTitulo());
         descricao.setText(notaRecebida.getDescricao());
+        corDeFundoSelecionada = notaRecebida.getCor();
+        layoutNotaFormulario.setBackgroundColor(Color.parseColor(corDeFundoSelecionada));
     }
 
+    @SuppressLint("ResourceType")
     private void inicializaCampos() {
         titulo = findViewById(R.id.formulario_nota_titulo);
         descricao = findViewById(R.id.formulario_nota_descricao);
         layoutNotaFormulario = findViewById(R.id.layout_nota_formulario);
+        corDeFundoSelecionada = getResources().getString(R.color.brancoLista);
         List<String> listaCores = pegaTodasCores();
         configuraRvCores(listaCores);
     }
@@ -117,7 +123,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
             @Override
             public void onItemClick(String corEscolhida) {
                 try {
-                    definirCorDeFundo(corEscolhida);
+                    layoutNotaFormulario.setBackgroundColor(Color.parseColor(corEscolhida));
                     corDeFundoSelecionada = corEscolhida;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -125,10 +131,6 @@ public class FormularioNotaActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void definirCorDeFundo(String corEscolhida) throws Exception{
-        layoutNotaFormulario.setBackgroundColor(Color.parseColor(corEscolhida));
     }
 
     @Override
