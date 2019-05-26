@@ -1,5 +1,6 @@
 package br.com.alura.ceep.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -89,19 +90,18 @@ public class FormularioNotaActivity extends AppCompatActivity {
         configuraRvCores(listaCores);
     }
 
+    @SuppressLint("ResourceType")
     private List<String> pegaTodasCores() {
         List<String> cores = new ArrayList<>();
-
-        cores.add("#FFFFFF");
-        cores.add("#408EC9");
-        cores.add("#EC2F4B");
-        cores.add("#9ACD32");
-        cores.add("#F9F256");
-        cores.add("#F1CBFF");
-        cores.add("#D2D4DC");
-        cores.add("#A47C48");
-        cores.add("#BE29EC");
-
+        cores.add(getResources().getString(R.color.brancoLista));
+        cores.add(getResources().getString(R.color.azulLista));
+        cores.add(getResources().getString(R.color.vermelhoLista));
+        cores.add(getResources().getString(R.color.verdeLista));
+        cores.add(getResources().getString(R.color.amareloLista));
+        cores.add(getResources().getString(R.color.lilasLista));
+        cores.add(getResources().getString(R.color.cinzaLista));
+        cores.add(getResources().getString(R.color.marromLista));
+        cores.add(getResources().getString(R.color.roxoLista));
         return cores;
     }
 
