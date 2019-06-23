@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import br.com.alura.ceep.R;
+import br.com.alura.ceep.Utils.Preferencias;
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter;
@@ -36,8 +38,6 @@ public class ListaNotasActivity extends AppCompatActivity {
 
 
     public static final String TITULO_APPBAR = "Notas";
-    public static final String MODO_DE_LISTAGEM = "modo_de_listagem";
-    public static final String LISTA_CHAVE = "lista";
     public static final int MODO_STAGGERED = 2;
     public static final int MODO_LINEAR = 1;
     private ListaNotasAdapter adapter;
@@ -103,8 +103,8 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_lista_exibicao, menu);
-        int modoDeListagem = pegarPreferencias();
+        getMenuInflater().inflate(R.menu.menu_lista_notas, menu);
+        int modoDeListagem = Preferencias.pegarPreferencias(this);
         switch (modoDeListagem){
             case 1:
                 configurarInterfaceParaListaLinear(menu.getItem(0));
@@ -113,7 +113,7 @@ public class ListaNotasActivity extends AppCompatActivity {
                 configurarInterfaceParaListaEscalonada(menu.getItem(0));
                 break;
             default:
-                configurarInterfaceParaListaLinear(menu.getItem(0));
+                Log.e("PARAMETROS", "Modo de listagem inválido");
                 break;
         }
         return true;
@@ -132,7 +132,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(pegarPreferencias() == MODO_LINEAR){
+        if(Preferencias.pegarPreferencias(this) == MODO_LINEAR){
             configurarInterfaceParaListaEscalonada(item);
             salvarModoDeListagem(MODO_STAGGERED);
         }else{
@@ -143,14 +143,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private void salvarModoDeListagem(int modoDeListagem) {
-        SharedPreferences.Editor editor = getSharedPreferences(MODO_DE_LISTAGEM, MODE_PRIVATE).edit();
-        editor.putInt(LISTA_CHAVE, modoDeListagem);
-        editor.apply();
-    }
-
-    private int pegarPreferencias() {
-        SharedPreferences prefs = getSharedPreferences(MODO_DE_LISTAGEM, MODE_PRIVATE);
-        return prefs.getInt(LISTA_CHAVE, 0);
+        Preferencias.salvarModoDeListagem(modoDeListagem, this);
     }
 
     private void altera(Nota nota, int posicao) {
