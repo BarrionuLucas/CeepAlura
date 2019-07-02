@@ -1,37 +1,38 @@
 package br.com.alura.ceep.dao;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
+
 import java.util.List;
 
 import br.com.alura.ceep.model.Nota;
 
-public class NotaDAO {
+@Dao
+public interface NotaDAO {
 
-    private final static ArrayList<Nota> notas = new ArrayList<>();
+    @Insert
+    void insere(Nota... notas);
 
-    public List<Nota> todos() {
-        return (List<Nota>) notas.clone();
-    }
+    @Query("SELECT * FROM Nota " +
+            "ORDER BY posicao ASC")
+    List<Nota> todos();
 
-    public void insere(Nota... notas) {
-        NotaDAO.notas.addAll(Arrays.asList(notas));
-    }
+    @Query("SELECT * FROM Nota " +
+            "WHERE idNota = :idNota")
+    Nota buscaNota(long idNota);
 
-    public void altera(int posicao, Nota nota) {
-        notas.set(posicao, nota);
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void altera(Nota... nota);
 
-    public void remove(int posicao) {
-        notas.remove(posicao);
-    }
+    @Delete
+    public void remove(Nota nota);
 
-    public void troca(int posicaoInicio, int posicaoFim) {
-        Collections.swap(notas, posicaoInicio, posicaoFim);
-    }
+    @Query("DELETE FROM Nota")
+    public void removeTodos();
 
-    public void removeTodos() {
-        notas.clear();
-    }
+    @Query("SELECT COUNT(*) FROM Nota")
+    public int ultimaPosicao();
 }
