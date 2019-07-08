@@ -1,5 +1,6 @@
 package br.com.alura.ceep.model;
 
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -12,7 +13,7 @@ public class Nota implements Serializable{
     private final String titulo;
     private final String descricao;
     private final String cor;
-    private final int posicao;
+    private int posicao;
 
 
     public Nota(String titulo, String descricao, String cor, int posicao) {
@@ -24,6 +25,10 @@ public class Nota implements Serializable{
 
     public Long getIdNota() {
         return idNota;
+    }
+
+    public void setIdNota(Long idNota) {
+        this.idNota = idNota;
     }
 
     public String getTitulo() {
@@ -40,5 +45,9 @@ public class Nota implements Serializable{
 
     public int getPosicao() {
         return posicao;
+    }
+
+    public void setPosicao(int posicao) {
+        this.posicao = posicao;
     }
 }

@@ -1,20 +1,19 @@
 package br.com.alura.ceep.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaCoresAdapter;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnColorClickListener;
 
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA;
 
 public class FormularioNotaActivity extends AppCompatActivity implements ControladorUIFormulario{
@@ -54,16 +52,14 @@ public class FormularioNotaActivity extends AppCompatActivity implements Control
 
         setTitle(TITULO_APPBAR_INSERE);
         inicializaCampos();
-        notaDao = database.getNotaDAO();
+
+
         Intent dadosRecebidos = getIntent();
         if(dadosRecebidos.hasExtra(ID_NOTA)){
             setTitle(TITULO_APPBAR_ALTERA);
             Long idNota = dadosRecebidos.getLongExtra(ID_NOTA, POSICAO_INVALIDA);
             Nota notaRecebida = notaDao.buscaNota(idNota);
             preencheCampos(notaRecebida);
-        }else{
-            Toast.makeText(this, "Houve uma falha na recuperação da nota", Toast.LENGTH_SHORT).show();
-            onBackPressed();
         }
     }
 
@@ -103,6 +99,8 @@ public class FormularioNotaActivity extends AppCompatActivity implements Control
         layoutNotaFormulario = findViewById(R.id.layout_nota_formulario);
         loadingSalvaNota = findViewById(R.id.loading_salva_nota);
         corDeFundoSelecionada = getResources().getString(R.color.brancoLista);
+        database = NotasDatabase.getInstance(this);
+        notaDao = database.getNotaDAO();
         List<String> listaCores = pegaTodasCores();
         configuraRvCores(listaCores);
     }
@@ -161,7 +159,7 @@ public class FormularioNotaActivity extends AppCompatActivity implements Control
     }
 
     private void salvaNota(Nota nota) {
-        notaDao.altera(nota);
+        notaDao.alteraNota(nota);
     }
 
     @NonNull

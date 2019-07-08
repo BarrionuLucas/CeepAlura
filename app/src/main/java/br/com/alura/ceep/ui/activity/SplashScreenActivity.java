@@ -1,10 +1,11 @@
 package br.com.alura.ceep.ui.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.Utils.Preferencias;

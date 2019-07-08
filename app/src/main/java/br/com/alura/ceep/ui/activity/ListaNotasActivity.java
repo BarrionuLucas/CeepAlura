@@ -2,27 +2,26 @@ package br.com.alura.ceep.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.helper.ItemTouchHelper;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.Utils.Preferencias;
 import br.com.alura.ceep.dao.NotaDAO;
+import br.com.alura.ceep.database.NotasDatabase;
 import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
@@ -42,6 +41,8 @@ public class ListaNotasActivity extends AppCompatActivity {
     public static final int MODO_LINEAR = 1;
     private ListaNotasAdapter adapter;
     private RecyclerView listaNotas;
+    private NotaDAO dao;
+    private List<Nota> todasNotas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class ListaNotasActivity extends AppCompatActivity {
 
         setTitle(TITULO_APPBAR);
 
-        List<Nota> todasNotas = pegaTodasNotas();
+        todasNotas = pegaTodasNotas();
         configuraRecyclerView(todasNotas);
         configuraBotaoInsereNota();
     }
@@ -74,7 +75,8 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private List<Nota> pegaTodasNotas() {
-        NotaDAO dao = new NotaDAO();
+        dao = NotasDatabase.getInstance(this)
+                .getNotaDAO();
         return dao.todos();
     }
 
@@ -147,7 +149,8 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private void altera(Nota nota, int posicao) {
-        new NotaDAO().altera(posicao, nota);
+        todasNotas.set(posicao, nota);
+        dao.altera(todasNotas);
         adapter.altera(posicao, nota);
     }
 
@@ -165,7 +168,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private void adiciona(Nota nota) {
-        new NotaDAO().insere(nota);
+        dao.insere(nota);
         adapter.adiciona(nota);
     }
 
@@ -194,7 +197,7 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     private void configuraItemTouchHelper(RecyclerView listaNotas) {
         ItemTouchHelper itemTouchHelper =
-                new ItemTouchHelper(new NotaItemTouchHelperCallback(adapter));
+                new ItemTouchHelper(new NotaItemTouchHelperCallback(adapter, dao));
         itemTouchHelper.attachToRecyclerView(listaNotas);
     }
 

@@ -2,24 +2,10 @@ package br.com.alura.ceep.asynctask;
 
 import android.os.AsyncTask;
 
-import br.com.alura.ceep.model.Nota;
-
-public class SalvaNotaTask extends AsyncTask {
-
-
+public class SalvaNotaTask extends AsyncTask<Void, Void, Void> {
 
     @Override
-    protected void onPreExecute() {
-
-    }
-
-    @Override
-    protected Object doInBackground(Object[] objects) {
+    protected Void doInBackground(Void... voids) {
         return null;
-    }
-
-    @Override
-    protected void onPostExecute(Object o) {
-        super.onPostExecute(o);
     }
 }
