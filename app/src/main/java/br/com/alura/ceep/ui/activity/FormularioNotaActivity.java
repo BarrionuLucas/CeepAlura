@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,6 +99,7 @@ public class FormularioNotaActivity extends AppCompatActivity implements Control
         descricao = findViewById(R.id.formulario_nota_descricao);
         layoutNotaFormulario = findViewById(R.id.layout_nota_formulario);
         loadingSalvaNota = findViewById(R.id.loading_salva_nota);
+        loadingSalvaNota.setVisibility(View.GONE);
         corDeFundoSelecionada = getResources().getString(R.color.brancoLista);
         database = NotasDatabase.getInstance(this);
         notaDao = database.getNotaDAO();
@@ -159,7 +161,9 @@ public class FormularioNotaActivity extends AppCompatActivity implements Control
     }
 
     private void salvaNota(Nota nota) {
+        loadingSalvaNota.setVisibility(View.VISIBLE);
         notaDao.alteraNota(nota);
+        loadingSalvaNota.setVisibility(View.GONE);
     }
 
     @NonNull
