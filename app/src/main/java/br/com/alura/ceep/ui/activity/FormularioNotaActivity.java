@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.alura.ceep.R;
+import br.com.alura.ceep.asynctask.SalvaNotaTask;
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.database.NotasDatabase;
 import br.com.alura.ceep.model.Nota;
@@ -155,15 +156,14 @@ public class FormularioNotaActivity extends AppCompatActivity implements Control
         if(ehMenuSalvaNota(item)){
             Nota notaCriada = criaNota();
             salvaNota(notaCriada);
-            finish();
+
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void salvaNota(Nota nota) {
-        loadingSalvaNota.setVisibility(View.VISIBLE);
-        notaDao.alteraNota(nota);
-        loadingSalvaNota.setVisibility(View.GONE);
+        SalvaNotaTask task = new SalvaNotaTask(notaDao, nota, this);
+        task.execute();
     }
 
     @NonNull

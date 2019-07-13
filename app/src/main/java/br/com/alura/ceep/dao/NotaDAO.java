@@ -13,38 +13,38 @@ import java.util.List;
 import br.com.alura.ceep.model.Nota;
 
 @Dao
-public abstract class NotaDAO {
+public interface NotaDAO {
 
     @Insert
-    public abstract void insere(Nota... notas);
+     void insere(Nota... notas);
 
     @Query("SELECT * FROM Nota " +
             "ORDER BY posicao ASC")
-    public abstract List<Nota> todos();
+    List<Nota> todos();
 
     @Query("SELECT * FROM Nota " +
             "WHERE idNota = :idNota")
-    public abstract Nota buscaNota(long idNota);
+     Nota buscaNota(long idNota);
 
     @Query("SELECT * FROM Nota " +
             "WHERE posicao = :posicao")
-    public abstract Nota buscaNotaPelaPosicao(int posicao);
+     Nota buscaNotaPelaPosicao(int posicao);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void altera(List<Nota> todasNotas);
+     void altera(List<Nota> todasNotas);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void alteraNota(Nota nota);
+     void alteraNota(Nota nota);
 
     @Delete
-    public abstract void remove(Nota nota);
+     void remove(Nota nota);
 
     @Query("DELETE FROM Nota")
-    public abstract void removeTodos();
+     void removeTodos();
 
     @Query("DELETE FROM Nota where posicao = :posicao")
-    public abstract void removePelaPosicao(int posicao);
+     void removePelaPosicao(int posicao);
 
     @Query("SELECT COUNT(*) FROM Nota")
-    public abstract int ultimaPosicao();
+     int ultimaPosicao();
 }

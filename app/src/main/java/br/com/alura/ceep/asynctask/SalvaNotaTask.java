@@ -36,4 +36,5 @@ public class SalvaNotaTask extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
         listener.controlaLoading(View.GONE);
     }
+
 }

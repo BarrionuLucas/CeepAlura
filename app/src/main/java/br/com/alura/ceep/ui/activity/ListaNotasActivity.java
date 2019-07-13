@@ -2,6 +2,7 @@ package br.com.alura.ceep.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.alura.ceep.R;
@@ -51,7 +53,7 @@ public class ListaNotasActivity extends AppCompatActivity {
 
         setTitle(TITULO_APPBAR);
 
-        todasNotas = pegaTodasNotas();
+        pegaTodasNotas();
         configuraRecyclerView(todasNotas);
         configuraBotaoInsereNota();
     }
@@ -74,10 +76,11 @@ public class ListaNotasActivity extends AppCompatActivity {
                 CODIGO_REQUISICAO_INSERE_NOTA);
     }
 
-    private List<Nota> pegaTodasNotas() {
+    private void pegaTodasNotas() {
+        todasNotas = new ArrayList<>();
         dao = NotasDatabase.getInstance(this)
                 .getNotaDAO();
-        return dao.todos();
+
     }
 
     @Override
