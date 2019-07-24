@@ -5,8 +5,9 @@ package br.com.alura.ceep.ui.recyclerview.helper.callback;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import br.com.alura.ceep.asynctask.RemoveNotaPelaPosicaoTask;
+import br.com.alura.ceep.asynctask.TrocaNotasTask;
 import br.com.alura.ceep.dao.NotaDAO;
-import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter;
 
 public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
@@ -36,17 +37,7 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     private void trocaNotas(int posicaoInicial, int posicaoFinal) {
-        trataPosicaoNotaBanco(posicaoInicial, posicaoFinal);
-        adapter.troca(posicaoInicial, posicaoFinal);
-    }
-
-    private void trataPosicaoNotaBanco(int posicaoInicial, int posicaoFinal) {
-        Nota notaPosFinal = dao.buscaNotaPelaPosicao(posicaoFinal);
-        Nota notaPosInicial = dao.buscaNotaPelaPosicao(posicaoInicial);
-        notaPosFinal.setPosicao(posicaoInicial);
-        notaPosInicial.setPosicao(posicaoFinal);
-        dao.alteraNota(notaPosFinal);
-        dao.alteraNota(notaPosInicial);
+        new TrocaNotasTask(dao, adapter, posicaoInicial,posicaoFinal).execute();
     }
 
     @Override
@@ -56,7 +47,6 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     private void removeNota(int posicao) {
-        dao.removePelaPosicao(posicao);
-        adapter.remove(posicao);
+        new RemoveNotaPelaPosicaoTask(dao, adapter,posicao).execute();
     }
 }

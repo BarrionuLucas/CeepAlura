@@ -27,9 +27,10 @@ import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaCoresAdapter;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnColorClickListener;
 
+import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA;
 
-public class FormularioNotaActivity extends AppCompatActivity implements ControladorUIFormulario{
+public class FormularioNotaActivity extends AppCompatActivity{
 
 
     public static final String TITULO_APPBAR_INSERE = "Insere nota";
@@ -46,7 +47,7 @@ public class FormularioNotaActivity extends AppCompatActivity implements Control
     private NotaDAO notaDao;
     private NotasDatabase database;
     private ProgressBar loadingSalvaNota;
-
+    private Nota notaRecebida;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +58,12 @@ public class FormularioNotaActivity extends AppCompatActivity implements Control
 
 
         Intent dadosRecebidos = getIntent();
-        if(dadosRecebidos.hasExtra(ID_NOTA)){
+        if(dadosRecebidos.hasExtra(CHAVE_NOTA)){
             setTitle(TITULO_APPBAR_ALTERA);
-            Long idNota = dadosRecebidos.getLongExtra(ID_NOTA, POSICAO_INVALIDA);
-            Nota notaRecebida = notaDao.buscaNota(idNota);
+            notaRecebida = (Nota) dadosRecebidos.getSerializableExtra(CHAVE_NOTA);
             preencheCampos(notaRecebida);
+        }else{
+            notaRecebida = null;
         }
     }
 
@@ -154,24 +156,28 @@ public class FormularioNotaActivity extends AppCompatActivity implements Control
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(ehMenuSalvaNota(item)){
-            Nota notaCriada = criaNota();
-            salvaNota(notaCriada);
-
+            if(notaRecebida != null){
+                notaRecebida.setTitulo(titulo.getText().toString());
+                notaRecebida.setDescricao( descricao.getText().toString());
+                notaRecebida.setCor(corDeFundoSelecionada);
+                salvaNota(notaRecebida);
+            }else {
+                Nota notaCriada = criaNota();
+                salvaNota(notaCriada);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void salvaNota(Nota nota) {
-        SalvaNotaTask task = new SalvaNotaTask(notaDao, nota, this);
-        task.execute();
+        new SalvaNotaTask(notaDao, nota, this::finish).execute();
     }
 
     @NonNull
     private Nota criaNota() {
         return new Nota(titulo.getText().toString(),
                 descricao.getText().toString(),
-                corDeFundoSelecionada,
-                notaDao.ultimaPosicao()
+                corDeFundoSelecionada
         );
     }
 
@@ -179,8 +185,4 @@ public class FormularioNotaActivity extends AppCompatActivity implements Control
         return item.getItemId() == R.id.menu_formulario_nota_ic_salva;
     }
 
-    @Override
-    public void controlaLoading(int visibilidade) {
-        loadingSalvaNota.setVisibility(visibilidade);
-    }
 }

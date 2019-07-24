@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,13 +21,12 @@ import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 
 public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder> {
 
-    private final List<Nota> notas;
+    private final List<Nota> notas = new ArrayList<>();
     private final Context context;
     private OnItemClickListener onItemClickListener;
 
-    public ListaNotasAdapter(Context context, List<Nota> notas) {
+    public ListaNotasAdapter(Context context) {
         this.context = context;
-        this.notas = notas;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -51,8 +51,9 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         return notas.size();
     }
 
-    public void altera(int posicao, Nota nota) {
+    public void altera(Nota nota, int posicao) {
         notas.set(posicao, nota);
+        atualiza(notas);
         notifyDataSetChanged();
     }
 
@@ -62,9 +63,18 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
     }
 
     public void troca(int posicaoInicial, int posicaoFinal) {
-        Collections.swap(notas, posicaoInicial, posicaoFinal);
-
         notifyItemMoved(posicaoInicial, posicaoFinal);
+    }
+
+    public void adiciona(Nota nota) {
+        notas.add(nota);
+        notifyDataSetChanged();
+    }
+
+    public void atualiza(List<Nota> notas) {
+        this.notas.clear();
+        this.notas.addAll(notas);
+        notifyDataSetChanged();
     }
 
     class NotaViewHolder extends RecyclerView.ViewHolder {
@@ -99,9 +109,6 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         }
     }
 
-    public void adiciona(Nota nota) {
-        notas.add(nota);
-        notifyDataSetChanged();
-    }
+
 
 }
