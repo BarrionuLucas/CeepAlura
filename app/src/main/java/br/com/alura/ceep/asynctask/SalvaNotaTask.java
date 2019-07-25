@@ -1,12 +1,9 @@
 package br.com.alura.ceep.asynctask;
 
-import android.os.AsyncTask;
-import android.view.View;
-
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
 
-public class SalvaNotaTask extends BaseNotaTask {
+public class SalvaNotaTask extends BaseNotaFinalizaTask {
 
     private final NotaDAO notaDao;
     private final Nota nota;

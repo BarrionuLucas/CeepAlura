@@ -28,7 +28,6 @@ import br.com.alura.ceep.ui.recyclerview.adapter.ListaCoresAdapter;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnColorClickListener;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA;
 
 public class FormularioNotaActivity extends AppCompatActivity{
 

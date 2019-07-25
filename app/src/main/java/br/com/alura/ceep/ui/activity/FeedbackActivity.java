@@ -1,13 +1,12 @@
 package br.com.alura.ceep.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import br.com.alura.ceep.R;
-import br.com.alura.ceep.model.Nota;
 
 public class FeedbackActivity extends AppCompatActivity {
 

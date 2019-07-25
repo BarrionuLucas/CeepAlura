@@ -6,10 +6,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import br.com.alura.ceep.asynctask.BuscaNotaTask;
-import br.com.alura.ceep.asynctask.RemoveNotaTask;
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.database.NotasDatabase;
-import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 import br.com.alura.ceep.ui.recyclerview.helper.callback.NotaItemTouchHelperCallback;
@@ -30,14 +28,6 @@ public class ListaNotaView {
 
     public void atualizaNotas() {
         new BuscaNotaTask(dao, adapter).execute();
-    }
-
-    private void remove(Nota nota) {
-        new RemoveNotaTask(dao, adapter, nota).execute();
-    }
-
-    private void altera(Nota nota, int posicao) {
-        adapter.altera(nota, posicao );
     }
 
     public void configuraAdapter(RecyclerView listaDeNotas) {

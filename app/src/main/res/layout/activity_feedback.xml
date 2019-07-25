@@ -25,7 +25,6 @@
         android:layout_marginBottom="8dp"
         android:background="@color/colorFeedbackTitulo"
         android:textColor="@android:color/white"
-        android:textStyle="bold"
         android:textSize="18sp"
         android:text="Deixe o seu feedback! :)"
         app:layout_constraintBottom_toBottomOf="@+id/iv_feedback_banner"

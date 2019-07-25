@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import br.com.alura.ceep.R;
@@ -49,26 +48,6 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
     @Override
     public int getItemCount() {
         return notas.size();
-    }
-
-    public void altera(Nota nota, int posicao) {
-        notas.set(posicao, nota);
-        atualiza(notas);
-        notifyDataSetChanged();
-    }
-
-    public void remove(int posicao) {
-        notas.remove(posicao);
-        notifyItemRemoved(posicao);
-    }
-
-    public void troca(int posicaoInicial, int posicaoFinal) {
-        notifyItemMoved(posicaoInicial, posicaoFinal);
-    }
-
-    public void adiciona(Nota nota) {
-        notas.add(nota);
-        notifyDataSetChanged();
     }
 
     public void atualiza(List<Nota> notas) {

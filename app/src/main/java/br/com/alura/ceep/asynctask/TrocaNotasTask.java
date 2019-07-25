@@ -2,7 +2,6 @@ package br.com.alura.ceep.asynctask;
 
 import android.os.AsyncTask;
 
-import java.util.Collections;
 import java.util.List;
 
 import br.com.alura.ceep.dao.NotaDAO;

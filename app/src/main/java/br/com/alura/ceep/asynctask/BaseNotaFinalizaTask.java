@@ -2,11 +2,11 @@ package br.com.alura.ceep.asynctask;
 
 import android.os.AsyncTask;
 
-public abstract class BaseNotaTask extends AsyncTask<Void, Void, Void> {
+public abstract class BaseNotaFinalizaTask extends AsyncTask<Void, Void, Void> {
 
     private final FinalizadaListener listener;
 
-    public BaseNotaTask(FinalizadaListener listener) {
+    public BaseNotaFinalizaTask(FinalizadaListener listener) {
         this.listener = listener;
     }
 

@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.Utils.Preferencias;
-import br.com.alura.ceep.dao.NotaDAO;
-import br.com.alura.ceep.database.NotasDatabase;
 import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.ListaNotaView;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
