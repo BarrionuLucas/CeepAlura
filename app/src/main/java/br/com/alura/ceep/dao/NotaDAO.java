@@ -39,9 +39,6 @@ public interface NotaDAO {
     @Delete
      void remove(Nota nota);
 
-    @Query("DELETE FROM Nota")
-     void removeTodos();
-
     @Query("DELETE FROM Nota where posicao = :posicao")
      void removePelaPosicao(int posicao);
 

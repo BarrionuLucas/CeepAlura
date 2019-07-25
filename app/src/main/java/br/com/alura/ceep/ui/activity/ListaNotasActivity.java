@@ -23,7 +23,6 @@ import br.com.alura.ceep.ui.ListaNotaView;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_REQUISICAO_ALTERA_NOTA;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_REQUISICAO_INSERE_NOTA;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA;
@@ -35,7 +34,6 @@ public class ListaNotasActivity extends AppCompatActivity implements OnItemClick
     public static final int MODO_STAGGERED = 2;
     public static final int MODO_LINEAR = 1;
     private RecyclerView listaNotas;
-    private NotaDAO dao;
     private ListaNotaView listaNotaView;
 
     @Override
@@ -70,9 +68,6 @@ public class ListaNotasActivity extends AppCompatActivity implements OnItemClick
 
     private void consultaTodasNotas() {
         configuraAdapter(listaNotas);
-        dao = NotasDatabase.getInstance(this)
-                .getNotaDAO();
-
     }
 
     @Override

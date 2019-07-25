@@ -20,6 +20,7 @@ public class Nota implements Serializable{
         this.titulo = titulo;
         this.descricao = descricao;
         this.cor = cor;
+        this.posicao = -1;
     }
 
     public void setTitulo(String titulo) {

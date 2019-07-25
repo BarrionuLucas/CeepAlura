@@ -20,7 +20,9 @@ public class SalvaNotaTask extends BaseNotaTask {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        nota.setPosicao(notaDao.ultimaPosicao());
+        if(nota.getPosicao() == -1) {
+            nota.setPosicao(notaDao.ultimaPosicao());
+        }
         notaDao.alteraNota(nota);
         return null;
     }

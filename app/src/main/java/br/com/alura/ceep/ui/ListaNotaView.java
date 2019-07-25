@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import br.com.alura.ceep.asynctask.BuscaNotaTask;
-import br.com.alura.ceep.asynctask.RemoveNotaPelaPosicaoTask;
 import br.com.alura.ceep.asynctask.RemoveNotaTask;
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.database.NotasDatabase;
