@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_lista_exibicao_icone"
-        android:title="Salva nota"
+        android:title="Alterar Exibição"
         android:icon="@drawable/ic_grid_on_white_24dp"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_feedback"
+        android:title="Envie seu feedback"
+        android:icon="@drawable/ic_feedback"
         app:showAsAction="always"/>
 </menu>

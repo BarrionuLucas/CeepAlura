@@ -15,4 +15,12 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="FeedbackInputLayoutStyle" parent="Widget.Design.TextInputLayout">
+        <!-- Customize your theme here. -->
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+
+    </style>
+
 </resources>

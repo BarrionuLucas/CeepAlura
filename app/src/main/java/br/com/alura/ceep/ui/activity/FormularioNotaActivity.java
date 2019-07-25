@@ -1,44 +1,52 @@
 package br.com.alura.ceep.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.alura.ceep.R;
+import br.com.alura.ceep.asynctask.SalvaNotaTask;
+import br.com.alura.ceep.dao.NotaDAO;
+import br.com.alura.ceep.database.NotasDatabase;
 import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaCoresAdapter;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnColorClickListener;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO;
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA;
 
-public class FormularioNotaActivity extends AppCompatActivity {
+public class FormularioNotaActivity extends AppCompatActivity{
 
 
     public static final String TITULO_APPBAR_INSERE = "Insere nota";
     public static final String TITULO_APPBAR_ALTERA = "Altera nota";
-    private int posicaoRecibida = POSICAO_INVALIDA;
+    public static final String ID_NOTA = "idNota";
+    public static final String COR_DE_FUNDO = "bgColor";
+    public static final String ERRO_CONSULTA_COR = "Não foi posssível recuperar a cor definida";
     private TextView titulo;
     private TextView descricao;
     private ConstraintLayout layoutNotaFormulario;
     private RecyclerView rvCores;
     private ListaCoresAdapter listaCoresAdapter;
     private String corDeFundoSelecionada;
-
+    private NotaDAO notaDao;
+    private NotasDatabase database;
+    private ProgressBar loadingSalvaNota;
+    private Nota notaRecebida;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,13 +55,14 @@ public class FormularioNotaActivity extends AppCompatActivity {
         setTitle(TITULO_APPBAR_INSERE);
         inicializaCampos();
 
+
         Intent dadosRecebidos = getIntent();
         if(dadosRecebidos.hasExtra(CHAVE_NOTA)){
             setTitle(TITULO_APPBAR_ALTERA);
-            Nota notaRecebida = (Nota) dadosRecebidos
-                    .getSerializableExtra(CHAVE_NOTA);
-            posicaoRecibida = dadosRecebidos.getIntExtra(CHAVE_POSICAO, POSICAO_INVALIDA);
+            notaRecebida = (Nota) dadosRecebidos.getSerializableExtra(CHAVE_NOTA);
             preencheCampos(notaRecebida);
+        }else{
+            notaRecebida = null;
         }
     }
 
@@ -61,13 +70,13 @@ public class FormularioNotaActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         if(savedInstanceState != null){
-            corDeFundoSelecionada = savedInstanceState.getString("bgColor");
+            corDeFundoSelecionada = savedInstanceState.getString(COR_DE_FUNDO);
             try{
                 layoutNotaFormulario.setBackgroundColor(Color.parseColor(corDeFundoSelecionada));
             }catch (Exception e ){
                 e.printStackTrace();
                 layoutNotaFormulario.setBackgroundColor(Color.parseColor(getResources().getString(R.color.brancoLista)));
-                Toast.makeText(getApplicationContext(), "Não foi posssível recuperar a cor definida", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), ERRO_CONSULTA_COR, Toast.LENGTH_SHORT).show();
             }
         }
         super.onRestoreInstanceState(savedInstanceState);
@@ -91,7 +100,11 @@ public class FormularioNotaActivity extends AppCompatActivity {
         titulo = findViewById(R.id.formulario_nota_titulo);
         descricao = findViewById(R.id.formulario_nota_descricao);
         layoutNotaFormulario = findViewById(R.id.layout_nota_formulario);
+        loadingSalvaNota = findViewById(R.id.loading_salva_nota);
+        loadingSalvaNota.setVisibility(View.GONE);
         corDeFundoSelecionada = getResources().getString(R.color.brancoLista);
+        database = NotasDatabase.getInstance(this);
+        notaDao = database.getNotaDAO();
         List<String> listaCores = pegaTodasCores();
         configuraRvCores(listaCores);
     }
@@ -142,18 +155,21 @@ public class FormularioNotaActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(ehMenuSalvaNota(item)){
-            Nota notaCriada = criaNota();
-            retornaNota(notaCriada);
-            finish();
+            if(notaRecebida != null){
+                notaRecebida.setTitulo(titulo.getText().toString());
+                notaRecebida.setDescricao( descricao.getText().toString());
+                notaRecebida.setCor(corDeFundoSelecionada);
+                salvaNota(notaRecebida);
+            }else {
+                Nota notaCriada = criaNota();
+                salvaNota(notaCriada);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void retornaNota(Nota nota) {
-        Intent resultadoInsercao = new Intent();
-        resultadoInsercao.putExtra(CHAVE_NOTA, nota);
-        resultadoInsercao.putExtra(CHAVE_POSICAO, posicaoRecibida);
-        setResult(Activity.RESULT_OK,resultadoInsercao);
+    private void salvaNota(Nota nota) {
+        new SalvaNotaTask(notaDao, nota, this::finish).execute();
     }
 
     @NonNull
